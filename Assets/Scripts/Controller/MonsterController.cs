@@ -2,34 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MonsterController : MonoBehaviour {
+public class MonsterController : IRole {
 
-	public enum Act {
+	private enum Act {
 		Idle, Walk, Attack
 	}
-	bool _isPatrol = true; //巡逻
-	public Act _curAct;
-	public float _duration;
-	public float _elapsed;
-	public float _moveSpeed = 0.8f;
-	public Vector3 _speedVec;
-	public Quaternion _targetRotation;
+	private bool _isPatrol = true; //巡逻
+	private Act _curAct;
+	private float _duration;
+	private float _elapsed;
+	private float _moveSpeed = 5f;
+	private Vector3 _speedVec;
+	private Quaternion _targetRotation;
 
-	CharacterController _controller;
-	Animator _animator;
 
 	// Use this for initialization
 	void Start () {
-		gameObject.layer = GameLayer.Player;
-		_controller = GetComponent<CharacterController>();
-		_animator = GetComponent<Animator>();
+		kind = RoleKind.Monster;
+		gameObject.tag = GameTag.Monster;
+
 		if (_isPatrol) {
 			DoSomething();
 		}
 	}
-	
+	 
 	// Update is called once per frame
-	void Update () {
+	new void Update () {
+		base.Update();
+
 		if (_isPatrol) {
 			_elapsed += Time.deltaTime;
 			if (_elapsed >= _duration) {
@@ -47,7 +47,7 @@ public class MonsterController : MonoBehaviour {
 
 		_curAct = (Act)(Random.Range(0, 10) % 2);
 		_elapsed = 0;
-		_duration = Random.Range(2f, 5f);
+		_duration = Random.Range(0.5f, 2f);
 
 		if (_curAct == Act.Walk) {
 			_speedVec.x = Random.Range(-10f, 10f);

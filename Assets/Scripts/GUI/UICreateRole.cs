@@ -26,7 +26,7 @@ public class UICreateRole : MonoBehaviour {
 
 	// Use this for initialization
 	void Start() {
-		int idx = RoleManager.instance._characterIdx;
+		int idx = RoleManager.instance.characterIdx;
 		if (idx == -1) {
 			idx = Random.Range(0, _roleIcons.Length);
 		}

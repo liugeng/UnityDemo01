@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class AppMain : MonoBehaviour {
-
+	class Test { };
 	// Use this for initialization
 	void Start () {
         DontDestroyOnLoad(GameObject.Find("Managers"));
@@ -15,7 +15,7 @@ public class AppMain : MonoBehaviour {
 
 		// 调试模式
 		if (GameSettings.debugSceneName != "") {
-			RoleManager.instance._characterIdx = 0;
+			RoleManager.instance.characterIdx = 0;
 			SceneManager.LoadScene(GameSettings.debugSceneName);
 			UIManager.instance.OpenUI(UI.HUD);
 

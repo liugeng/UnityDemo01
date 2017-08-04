@@ -58,6 +58,10 @@ public class FootstepPlayer : MonoBehaviour
 		//go.transform.localScale = Vector3.one * 0.1f;
 	}
 
+	void Hit() {
+
+	}
+
 	static private float GetRandomVolumeScale()
 	{
 		const float minRandom = 0.7f;

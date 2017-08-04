@@ -39,7 +39,7 @@ public class UIManager : MonoBehaviour {
 		}
 	}
 
-	public void ExitGameScene() {
+	public void OnExitGameScene() {
 		foreach (var ui in _uiDict) {
 			Destroy(ui.Value);
 		}

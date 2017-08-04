@@ -6,12 +6,17 @@ public class RoleManager : MonoBehaviour {
 
 	public static RoleManager instance;
 
-	public GameObject[] _roleModels;
-	public int _characterIdx;
+	public int characterIdx { get; set; }
+	[SerializeField]
+	private GameObject[] _characterModels;
+
+	// <IRole.id, IRole>
+	private Dictionary<int, IRole> _roles = new Dictionary<int, IRole>();
+
 
 	void Awake() {
 		instance = this;
-		_characterIdx = -1;
+		characterIdx = -1;
 	}
 
 	// Update is called once per frame
@@ -21,10 +26,11 @@ public class RoleManager : MonoBehaviour {
 
 	public GameObject CreateHero(int? modelIdx = null) {
 
-		_characterIdx = modelIdx ?? _characterIdx;
+		characterIdx = modelIdx ?? characterIdx;
 
-		GameObject hero = Instantiate(GetRoleModel(_characterIdx));
+		GameObject hero = Instantiate(GetRoleModel(characterIdx));
 		if (hero) {
+			//transform
 			GameObject bornPos = GameObject.Find("BornPos");
 			if (!bornPos) {
 				Debug.LogError("BornPos not found!");
@@ -32,16 +38,18 @@ public class RoleManager : MonoBehaviour {
 				return null;
 			}
 
-			hero.tag = GameTag.Hero;
-			hero.name = GameTag.Hero;
-
 			hero.transform.position = bornPos.transform.position;
 			hero.transform.rotation = bornPos.transform.rotation;
+			
+			//tag and name
+			hero.tag = GameTag.Hero;
+			hero.name = GameTag.Hero;
+			hero.layer = GameLayer.Role;
 
-			var heroCtrl = hero.AddComponent<HeroController>();
-
-			// 设置 JoyStick
-			JoyStick.instance.handler = heroCtrl;
+			//components
+			JoyStick.instance.handler = hero.AddComponent<HeroMove>();
+			hero.AddComponent<HeroFight>();
+			hero.AddComponent<HeroController>();
 
 			// 设置摄像机焦点
 			var cameraCtrl = Camera.main.gameObject.AddComponent<CameraController>();
@@ -53,12 +61,49 @@ public class RoleManager : MonoBehaviour {
 
 	// select: 获取模型的同时如果要将其作为主角模型的话值为true
 	public GameObject GetRoleModel(int idx, bool select = false) {
-		if (idx >= 0 && idx < _roleModels.Length) {
+		if (idx >= 0 && idx < _characterModels.Length) {
 			if (select) {
-				_characterIdx = idx;
+				characterIdx = idx;
 			}
-			return _roleModels[idx];
+			return _characterModels[idx];
 		}
 		return  null;
+	}
+
+	public void Push(IRole r) {
+		if (r) {
+			_roles[r.id] = r;
+		}
+	}
+
+	public IRole Find(int roleId) {
+		if (_roles.ContainsKey(roleId)) {
+			return _roles[roleId];
+		}
+		return null;
+	}
+
+	public IRole GetTargetByDistance(int range) {
+
+		IRole nearest = null;
+		float minDistance = float.MaxValue;
+		Vector3 heroPos = HeroController.instance.gameObject.transform.position;
+
+		foreach (var r in _roles) {
+			if (r.Value.kind == RoleKind.Hero) {
+				continue;
+			}
+			float dis = Vector3.Distance(heroPos, r.Value.gameObject.transform.position);
+			if (dis <= range && dis < minDistance) {
+				nearest = r.Value;
+				minDistance = dis;
+			}
+		}
+
+		return nearest;
+	}
+
+	public void OnExitGameScene() {
+		_roles.Clear();
 	}
 }

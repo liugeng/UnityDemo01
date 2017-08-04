@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class GameLayer {
 	public static int UI		{ get { return LayerMask.NameToLayer("UI"); } }
     public static int Ground	{ get { return LayerMask.NameToLayer("Ground"); } }
-	public static int Player    { get { return LayerMask.NameToLayer("Player"); }}
+	public static int Role    { get { return LayerMask.NameToLayer("Role"); }}
 }
 
 public class GameTag {
     public static string Ground		= "Ground";
 	public static string Hero		= "Hero";
-    public static string Player		= "Player";
+    public static string Monster		= "Monster";
 }
 
 
