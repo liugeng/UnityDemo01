@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GameLayer {
+public static class GameLayer {
 	public static int UI		{ get { return LayerMask.NameToLayer("UI"); } }
     public static int Ground	{ get { return LayerMask.NameToLayer("Ground"); } }
-	public static int Role    { get { return LayerMask.NameToLayer("Role"); }}
+	public static int Role      { get { return LayerMask.NameToLayer("Role"); }}
 }
 
-public class GameTag {
-    public static string Ground		= "Ground";
-	public static string Hero		= "Hero";
-    public static string Monster		= "Monster";
+public static class GameTag {
+    public const string Ground		= "Ground";
+	public const string Hero		= "Hero";
+    public const string Monster		= "Monster";
 }
 
 

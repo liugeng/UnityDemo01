@@ -7,10 +7,11 @@ public class UIDefineEditor : Editor {
 
 	UIDefine def;
 	List<bool> showFold = new List<bool>();
+	SerializedProperty widgetList;
 
 	private void OnEnable() {
 		def = target as UIDefine;
-		for (int i = 0; i < def.list.Count; i++) {
+		for (int i = 0; i < def.uiList.Count; i++) {
 			showFold.Add(true);
 		}
 	}
@@ -36,16 +37,16 @@ public class UIDefineEditor : Editor {
 
 		EditorGUILayout.BeginHorizontal();
 		if (GUILayout.Button("添加")) {
-			def.list.Insert(0, new UIDefine.Define());
+			def.uiList.Insert(0, new UIDefine.Define());
 			showFold.Insert(0, true);
 		}
 		if (GUILayout.Button("排序")) {
-			for (int i = 0; i < def.list.Count-1; i++) {
-				for (int j = i+1; j < def.list.Count; j++) {
-					if (def.list[i].order < def.list[j].order) {
-						var tmp = def.list[i];
-						def.list[i] = def.list[j];
-						def.list[j] = tmp;
+			for (int i = 0; i < def.uiList.Count-1; i++) {
+				for (int j = i+1; j < def.uiList.Count; j++) {
+					if (def.uiList[i].order < def.uiList[j].order) {
+						var tmp = def.uiList[i];
+						def.uiList[i] = def.uiList[j];
+						def.uiList[j] = tmp;
 					}
 				}
 			}
@@ -64,16 +65,16 @@ public class UIDefineEditor : Editor {
 		EditorGUILayout.Separator();
 
 
-		for (int i = 0; i < def.list.Count; i++) {
+		for (int i = 0; i < def.uiList.Count; i++) {
 
-			var d = def.list[i];
+			var d = def.uiList[i];
 
 			GUILayout.Label("---------------------------------------------------------------------------------");
 
 			EditorGUILayout.BeginHorizontal();
 			showFold[i] = EditorGUILayout.Foldout(showFold[i], d.prefab ? d.prefab.name : "<None>");
 			if (GUILayout.Button("删除")) {
-				def.list.RemoveAt(i);
+				def.uiList.RemoveAt(i);
 				showFold.RemoveAt(i);
 				i--;
 				continue;
@@ -87,11 +88,11 @@ public class UIDefineEditor : Editor {
 
 				int order = EditorGUILayout.IntField("order", d.order);
 				if (order >= 0) {
-					def.list[i].order = order;
+					def.uiList[i].order = order;
 				}
-				def.list[i].modal = EditorGUILayout.Toggle("modal", d.modal);
+				def.uiList[i].modal = EditorGUILayout.Toggle("modal", d.modal);
 				//def.list[i].type = (UIDefine.Type)EditorGUILayout.EnumPopup("type", d.type);
-				def.list[i].description = EditorGUILayout.TextField("description", def.list[i].description);
+				def.uiList[i].description = EditorGUILayout.TextField("description", def.uiList[i].description);
 				EditorGUI.indentLevel--;
 			}
 
@@ -100,21 +101,20 @@ public class UIDefineEditor : Editor {
 
 		if (GUI.changed) {
 			EditorUtility.SetDirty(def);
-			def.AssignDict();
 		}
 	}
 
 	void SetNewPrefab(GameObject go, int i) {
 		if (go == null) {
-			def.list[i].prefab = go;
+			def.uiList[i].prefab = go;
 			return;
 		}
 
-		foreach (var d in def.list) {
+		foreach (var d in def.uiList) {
 			if (d.prefab && d.prefab.name == go.name) {
 				return;
 			}
 		}
-		def.list[i].prefab = go;
+		def.uiList[i].prefab = go;
 	}
 }
