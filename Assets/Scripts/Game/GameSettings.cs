@@ -26,6 +26,9 @@ public class GameSettings : MonoBehaviour {
 	//点击地面特效
 	public GameObject mouseGroundEffect;
 
+	//选中角色特效
+	public GameObject selectedEffect;
+
     
     void Start () {
         instance = this;

@@ -92,7 +92,7 @@ public class HeroFight : MonoBehaviour {
 		if (target == null) {
 			return;
 		}
-
+		
 		float distance = HeroController.instance.GetDistance(target);
 		if (distance > traceDistance) {
 			HeroMove.instance.TraceMove();
@@ -101,6 +101,10 @@ public class HeroFight : MonoBehaviour {
 
 		if (_sm.CanSwitch(HeroState.Attack)) {
 			_sm.Switch(HeroState.Attack);
+			Quaternion rotation = Quaternion.LookRotation(target.transform.position - transform.position);
+			rotation.x = 0;
+			rotation.z = 0;
+			transform.rotation = rotation;
 			Invoke("AttackOnceEnd", 1f);
 		}
 	}

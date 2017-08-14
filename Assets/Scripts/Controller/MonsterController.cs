@@ -24,8 +24,9 @@ public class MonsterController : IRole {
 		if (_isPatrol) {
 			DoSomething();
 		}
+
 	}
-	 
+
 	// Update is called once per frame
 	new void Update () {
 		base.Update();

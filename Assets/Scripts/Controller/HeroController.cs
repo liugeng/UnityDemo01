@@ -38,12 +38,15 @@ public class HeroController : IRole, IStateManager {
 			/*Idle*/			{ 1,    0,    0,      0,      2 },
 			/*Run*/				{ 0,    0,    0,      0,      0 },
 			/*Trace*/		    { 0,    0,    0,      0,      0 },
-			/*Attack*/			{ 0,    1,    0,      1,      0 },
-			/*SelTarget*/		{ 2,    2,    2,      2,      2 }
+			/*Attack*/			{ 0,    0,    0,      1,      0 },
+			/*SelTarget*/		{ 0,    0,    0,      0,      0 }
 		});
 		_heroMove = GetComponent<HeroMove>();
 		_heroFight = GetComponent<HeroFight>();
-    }
+
+		//选中特效
+		var selectedEffect = Instantiate(GameSettings.instance.selectedEffect, transform);
+	}
 	
 	new void Update () {
 		base.Update();
@@ -69,6 +72,16 @@ public class HeroController : IRole, IStateManager {
 			_heroMove.CheckInput();
 		}
 	}
+
+	public float GetDistance(IRole r) {
+		if (r != null) {
+			return Vector3.Distance(gameObject.transform.position, r.gameObject.transform.position);
+		}
+		return 0f;
+	}
+
+
+	#region IStateManager Methods
 
 	public void OnStartState(int stateType) {
 		HeroState state = (HeroState)stateType;
@@ -98,6 +111,7 @@ public class HeroController : IRole, IStateManager {
 
 		} else if (state == HeroState.Attack) {
 			_animator.SetBool("attack", false);
+			_heroFight.CancelInvoke();
 		}
 	}
 
@@ -117,13 +131,10 @@ public class HeroController : IRole, IStateManager {
 			} else if (r.kind == RoleKind.Npc) {
 
 			}
+		} else if (state == HeroState.Attack) {
+			_heroFight.Attack();
 		}
 	}
 
-	public float GetDistance(IRole r) {
-		if (r != null) {
-			return Vector3.Distance(gameObject.transform.position, r.gameObject.transform.position);
-		}
-		return 0f;
-	}
+	#endregion
 }
