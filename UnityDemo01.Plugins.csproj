@@ -88,6 +88,7 @@
     <Compile Include="Assets\Plugins\HighlightingSystem\Scripts\HighlightingEffect.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Materials\Circle.shader" />
     <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
     <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingComposite.shader" />
     <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingInclude.cginc" />

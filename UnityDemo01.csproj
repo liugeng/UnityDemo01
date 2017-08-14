@@ -105,11 +105,14 @@
     <Compile Include="Assets\Scripts\GUI\Widgets\JoyStick.cs" />
     <Compile Include="Assets\Scripts\GUI\Widgets\Progress.cs" />
     <Compile Include="Assets\Scripts\GUI\Widgets\ToggleMenu.cs" />
+    <Compile Include="Assets\Scripts\GUI\Widgets\WidgetDefine.cs" />
     <Compile Include="Assets\Scripts\Game\AudioClipCollection.cs" />
     <Compile Include="Assets\Scripts\Game\CreateRole.cs" />
     <Compile Include="Assets\Scripts\Game\FootstepPlayer.cs" />
     <Compile Include="Assets\Scripts\Game\GameScene.cs" />
     <Compile Include="Assets\Scripts\Game\GameSettings.cs" />
+    <Compile Include="Assets\Scripts\Game\NameLabel.cs" />
+    <Compile Include="Assets\Scripts\Game\SelectedEffect.cs" />
     <Compile Include="Assets\Scripts\Game\TypeDefines.cs" />
     <Compile Include="Assets\Scripts\Manager\RoleManager.cs" />
     <Compile Include="Assets\Scripts\Manager\StateManager.cs" />
@@ -119,6 +122,7 @@
     <Compile Include="Assets\Textures\Grass And Flowers Pack\Example Scene\SimpleTextureDrawing.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Materials\Circle.shader" />
     <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingBlur.shader" />
     <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingComposite.shader" />
     <None Include="Assets\Plugins\HighlightingSystem\Resources\HighlightingInclude.cginc" />
