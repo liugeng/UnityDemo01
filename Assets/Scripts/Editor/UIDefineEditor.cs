@@ -7,7 +7,6 @@ public class UIDefineEditor : Editor {
 
 	UIDefine def;
 	List<bool> showFold = new List<bool>();
-	SerializedProperty widgetList;
 
 	private void OnEnable() {
 		def = target as UIDefine;
@@ -95,8 +94,6 @@ public class UIDefineEditor : Editor {
 				def.uiList[i].description = EditorGUILayout.TextField("description", def.uiList[i].description);
 				EditorGUI.indentLevel--;
 			}
-
-			EditorGUILayout.Separator();
 		}
 
 		if (GUI.changed) {

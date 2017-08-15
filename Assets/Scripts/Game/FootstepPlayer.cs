@@ -59,7 +59,9 @@ public class FootstepPlayer : MonoBehaviour
 	}
 
 	void Hit() {
-
+		if (gameObject == HeroController.instance.gameObject) {
+			Camera.main.GetComponent<CameraShake>().DoShake();
+		}
 	}
 
 	static private float GetRandomVolumeScale()
