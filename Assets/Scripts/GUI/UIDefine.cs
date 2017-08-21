@@ -7,7 +7,7 @@ public class UIDefine : MonoBehaviour {
 
 	[System.Serializable]
 	public class Define {
-		public GameObject prefab;
+		public string name;
 		public int order = 100;
 		public bool modal;
 		public string description;
@@ -23,14 +23,6 @@ public class UIDefine : MonoBehaviour {
 
 	private void Awake() {
 		instance = this;
-	}
-
-	public GameObject GetPrefab(string uiname) {
-		InitDictIfNeeded();
-		if (uiDict.ContainsKey(uiname)) {
-			return uiDict[uiname].prefab;
-		}
-		return null;
 	}
 
 	public int GetOrder(string uiname) {
@@ -53,8 +45,8 @@ public class UIDefine : MonoBehaviour {
 		if (uiDict == null) {
 			uiDict = new Dictionary<string, Define>();
 			foreach (var def in uiList) {
-				if (def.prefab) {
-					uiDict.Add(def.prefab.name, def);
+				if (def.name != "") {
+					uiDict.Add(def.name, def);
 				}
 			}
 		}

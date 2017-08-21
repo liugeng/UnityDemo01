@@ -18,12 +18,36 @@ public class UIManager : MonoBehaviour {
 	}
 
 	public GameObject OpenUI(string uiname) {
-		GameObject prefab = _def.GetPrefab(uiname);
+		GameObject prefab = Resources.Load<GameObject>("GUI/" + uiname);
 		if (prefab) {
 			GameObject go = Instantiate(prefab, transform) as GameObject;
 			go.name = uiname;
 			go.SetActive(true);
-			go.transform.SetSiblingIndex(_def.GetOrder(uiname));
+
+			// 根据定义的UI层级对窗口进行排序
+			int order = _def.GetOrder(uiname);
+			bool ordered = false;
+			if (transform.childCount > 0) {
+				for (int i = transform.childCount - 1; i >= 0; i--) {
+					var child = transform.GetChild(i);
+					if (_def.GetOrder(child.gameObject.name) <= order) {
+						go.transform.SetSiblingIndex(i + 1);
+						ordered = true;
+						break;
+					}
+				}
+			}
+			
+			if (!ordered) {
+				go.transform.SetSiblingIndex(0);
+			}
+
+			//Debug.Log("------------Dump child------------");
+			//for (int i = 0; i < transform.childCount; i++) {
+			//	var child = transform.GetChild(i);
+			//	Debug.Log("child sibling index: " + child.gameObject.name + "  " + child.GetSiblingIndex());
+			//}
+			//Debug.Log("------------end");
 
 			_uiDict.Add(uiname, go);
 

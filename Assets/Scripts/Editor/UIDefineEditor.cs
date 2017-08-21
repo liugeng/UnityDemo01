@@ -71,7 +71,8 @@ public class UIDefineEditor : Editor {
 			GUILayout.Label("---------------------------------------------------------------------------------");
 
 			EditorGUILayout.BeginHorizontal();
-			showFold[i] = EditorGUILayout.Foldout(showFold[i], d.prefab ? d.prefab.name : "<None>");
+			showFold[i] = EditorGUILayout.Foldout(showFold[i], "");
+			d.name = EditorGUILayout.TextField("", d.name);
 			if (GUILayout.Button("删除")) {
 				def.uiList.RemoveAt(i);
 				showFold.RemoveAt(i);
@@ -82,8 +83,6 @@ public class UIDefineEditor : Editor {
 
 			if (showFold[i]) {
 				EditorGUI.indentLevel++;
-				GameObject go = EditorGUILayout.ObjectField("prefab", d.prefab, typeof(GameObject), false) as GameObject;
-				SetNewPrefab(go, i);
 
 				int order = EditorGUILayout.IntField("order", d.order);
 				if (order >= 0) {
@@ -99,19 +98,5 @@ public class UIDefineEditor : Editor {
 		if (GUI.changed) {
 			EditorUtility.SetDirty(def);
 		}
-	}
-
-	void SetNewPrefab(GameObject go, int i) {
-		if (go == null) {
-			def.uiList[i].prefab = go;
-			return;
-		}
-
-		foreach (var d in def.uiList) {
-			if (d.prefab && d.prefab.name == go.name) {
-				return;
-			}
-		}
-		def.uiList[i].prefab = go;
 	}
 }
