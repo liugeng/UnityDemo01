@@ -1,0 +1,7 @@
+,,Idle,TargetMove,CtrlMove,Trace,Attack,SelTarget
+站立,Idle,1,0,0,0,0,2
+寻路到某坐标,TargetMove,0,0,0,0,0,0
+键盘或手柄控制移动,CtrlMove,0,1,0,1,1,2
+追踪,Trace,0,0,0,0,0,0
+攻击,Attack,0,0,0,0,1,0
+选择目标,SelTarget,0,0,0,0,0,0

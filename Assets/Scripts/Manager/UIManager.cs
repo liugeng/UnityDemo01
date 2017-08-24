@@ -8,7 +8,6 @@ public class UIManager : MonoBehaviour {
 	
 	public static UIManager instance;
 	[SerializeField]
-	private UIDefine _def;
 	private Dictionary<string, GameObject> _uiDict = new Dictionary<string, GameObject>();
 
 	void Awake () {
@@ -25,20 +24,23 @@ public class UIManager : MonoBehaviour {
 			go.SetActive(true);
 
 			// 根据定义的UI层级对窗口进行排序
-			int order = _def.GetOrder(uiname);
-			bool ordered = false;
+			int order = UIOrder.Get(uiname);
+			bool sorted = false;
 			if (transform.childCount > 0) {
 				for (int i = transform.childCount - 1; i >= 0; i--) {
 					var child = transform.GetChild(i);
-					if (_def.GetOrder(child.gameObject.name) <= order) {
+					if (child.gameObject == go) {
+						continue;
+					}
+					if (order >= UIOrder.Get(child.gameObject.name)) {
 						go.transform.SetSiblingIndex(i + 1);
-						ordered = true;
+						sorted = true;
 						break;
 					}
 				}
 			}
 			
-			if (!ordered) {
+			if (!sorted) {
 				go.transform.SetSiblingIndex(0);
 			}
 

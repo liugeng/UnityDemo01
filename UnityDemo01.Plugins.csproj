@@ -85,25 +85,34 @@
     <Reference Include="DemiLib">
       <HintPath>Assets\Demigiant\DemiLib\Core\DemiLib.dll</HintPath>
     </Reference>
+    <Reference Include="DOTween">
+      <HintPath>Assets\Demigiant\DOTween\DOTween.dll</HintPath>
+    </Reference>
     <Reference Include="DOTween43">
       <HintPath>Assets\Demigiant\DOTween\DOTween43.dll</HintPath>
+    </Reference>
+    <Reference Include="DOTween46">
+      <HintPath>Assets\Demigiant\DOTween\DOTween46.dll</HintPath>
     </Reference>
     <Reference Include="DOTween50">
       <HintPath>Assets\Demigiant\DOTween\DOTween50.dll</HintPath>
     </Reference>
-    <Reference Include="DOTween">
-      <HintPath>Assets\Demigiant\DOTween\DOTween.dll</HintPath>
-    </Reference>
     <Reference Include="DOTweenPro">
       <HintPath>Assets\Demigiant\DOTweenPro\DOTweenPro.dll</HintPath>
-    </Reference>
-    <Reference Include="DOTween46">
-      <HintPath>Assets\Demigiant\DOTween\DOTween46.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Plugins\HighlightingSystem\Scripts\HighlightableObject.cs" />
     <Compile Include="Assets\Plugins\HighlightingSystem\Scripts\HighlightingEffect.cs" />
+    <Compile Include="Assets\Plugins\LitJson\IJsonWrapper.cs" />
+    <Compile Include="Assets\Plugins\LitJson\JsonData.cs" />
+    <Compile Include="Assets\Plugins\LitJson\JsonException.cs" />
+    <Compile Include="Assets\Plugins\LitJson\JsonMapper.cs" />
+    <Compile Include="Assets\Plugins\LitJson\JsonMockWrapper.cs" />
+    <Compile Include="Assets\Plugins\LitJson\JsonReader.cs" />
+    <Compile Include="Assets\Plugins\LitJson\JsonWriter.cs" />
+    <Compile Include="Assets\Plugins\LitJson\Lexer.cs" />
+    <Compile Include="Assets\Plugins\LitJson\ParserToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Demigiant\DOTween\DOTween.XML" />

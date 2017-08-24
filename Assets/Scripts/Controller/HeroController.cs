@@ -7,7 +7,8 @@ using UnityEngine.EventSystems;
 // 角色状态
 enum HeroState {
 	Idle,
-	Run,
+	TargetMove,
+	CtrlMove,
 	Trace,
 	Attack,
 	SelTarget,	//选择目标，瞬时行为，执行完后会立即结束，不同于持续行为
@@ -31,16 +32,8 @@ public class HeroController : IRole, IStateManager {
 
 		instance = this;
 		
-		//定义状态关系
-		//0 StopCurrent  1 KeepCurrent  2 Coexist
-		_sm = new StateManager(this, new int[(int)HeroState.Max, (int)HeroState.Max] {
-			//cur \ new          Idle  Run   Trace  Attack  SelTarget
-			/*Idle*/			{ 1,    0,    0,      0,      2 },
-			/*Run*/				{ 0,    0,    0,      0,      0 },
-			/*Trace*/		    { 0,    0,    0,      0,      0 },
-			/*Attack*/			{ 0,    0,    0,      1,      0 },
-			/*SelTarget*/		{ 0,    0,    0,      0,      0 }
-		});
+		//初始化状态管理器
+		_sm = new StateManager(this, "HeroState.csv");
 		_heroMove = GetComponent<HeroMove>();
 		_heroFight = GetComponent<HeroFight>();
 
@@ -87,7 +80,7 @@ public class HeroController : IRole, IStateManager {
 		HeroState state = (HeroState)stateType;
 		Debug.Log("Start State: " + stateType);
 
-		if (state == HeroState.Run) {
+		if (state == HeroState.TargetMove || state == HeroState.CtrlMove) {
 			_animator.SetBool("run", true);
 
 		} else if (state == HeroState.Trace) {
@@ -101,7 +94,7 @@ public class HeroController : IRole, IStateManager {
 	public void OnInterruptState(int stateType) {
 		HeroState state = (HeroState)stateType;
 
-		if (state == HeroState.Run) {
+		if (state == HeroState.TargetMove || state == HeroState.CtrlMove) {
 			_animator.SetBool("run", false);
 			_heroMove.Reset();
 
@@ -118,7 +111,7 @@ public class HeroController : IRole, IStateManager {
 	public void OnStateEnd(int stateType) {
 		HeroState state = (HeroState)stateType;
 
-		if (state == HeroState.Run) {
+		if (state == HeroState.TargetMove || state == HeroState.CtrlMove) {
 			_animator.SetBool("run", false);
 
 		} else if (state == HeroState.Trace) {

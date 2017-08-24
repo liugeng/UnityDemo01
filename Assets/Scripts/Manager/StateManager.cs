@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 
@@ -23,10 +24,24 @@ public class StateManager {
 	private List<int> _curStates = new List<int>();
 	private IStateManager _handler;
 
-	public StateManager(IStateManager handler, int[,] relations) {
+	public StateManager(IStateManager handler, string csvfile) {
 		_handler = handler;
-		_relations = relations;
-		_stateCount = (int)(relations.Length * 0.5);
+		loadCSV(Application.dataPath + "/Resources/" + csvfile);
+	}
+
+	private void loadCSV(string filepath) {
+		string[] str = File.ReadAllLines(filepath);
+		int col = str[0].Split(',').Length-2;
+		_relations = new int[str.Length-1, col];
+
+		for (int i = 1; i < str.Length; i++) {
+			string[] row = str[i].Split(',');
+			for (int j = 2; j < row.Length; j++) {
+				_relations[i-1, j-2] = int.Parse(row[j]);
+			}
+		}
+
+		_stateCount = col;
 	}
 
 	public bool CanSwitch(object stateObj) {

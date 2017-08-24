@@ -43,7 +43,7 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 
 	//HeroController check first, then call this function
 	public void CheckInput() {
-		if (!_sm.CanSwitch(HeroState.Run)) {
+		if (!_sm.CanSwitch(HeroState.CtrlMove)) {
 			return;
 		}
 
@@ -84,7 +84,7 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 			//transform.rotation = tmp;
 
 			if (_moveCtrlType != MoveCtrlType.Target) {
-				_sm.Switch(HeroState.Run);
+				_sm.Switch(HeroState.TargetMove);
 				_isMoving = true;
 				_moveCtrlType = MoveCtrlType.Target;
 			}
@@ -105,7 +105,7 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 			_tarRotation.z = 0f;
 
 			if (_moveCtrlType != ctrlType) {
-				_sm.Switch(HeroState.Run);
+				_sm.Switch(HeroState.CtrlMove);
 				_isMoving = true;
 				_moveCtrlType = ctrlType;
 			}
@@ -176,9 +176,13 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 	}
 
 	public void OnMoveEnd() {
+		if (_moveCtrlType == MoveCtrlType.Target) {
+			_sm.End(HeroState.TargetMove);
+		} else {
+			_sm.End(HeroState.CtrlMove);
+		}
 		_moveCtrlType = MoveCtrlType.None;
 		_isMoving = false;
-		_sm.End(HeroState.Run);
 	}
 
 	public void Reset() {

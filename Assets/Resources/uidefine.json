@@ -1,0 +1,14 @@
+[
+    {
+        "desc": "游戏主界面",
+        "name": "HUD"
+    },
+    {
+        "desc": "创建角色界面",
+        "name": "CreateRole"
+    },
+    {
+        "desc": "加载界面",
+        "name": "Loading"
+    }
+]
