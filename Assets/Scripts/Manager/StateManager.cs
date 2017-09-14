@@ -50,6 +50,10 @@ public class StateManager {
 		}
 
 		int state = (int)stateObj;
+		if (state >= _stateCount) {
+			Debug.LogError("State Type Error: " + state);
+			return false;
+		}
 
 		StateRelation relation = 0;
 		foreach (int s in _curStates) {
@@ -62,15 +66,11 @@ public class StateManager {
 		return true;
 	}
 
-	public void Switch(object stateObj) {
+	public bool Switch(object stateObj) {
 		int state = (int)stateObj;
-		if (state >= _stateCount) {
-			Debug.LogError("State Type Error: " + state);
-			return;
-		}
 
 		if (!CanSwitch(state)) {
-			return;
+			return false;
 		}
 
 		StateRelation relation = 0;
@@ -91,6 +91,8 @@ public class StateManager {
 		if (_handler != null) {
 			_handler.OnStartState(state);
 		}
+
+		return true;
 	}
 
 	public bool IsOn(object stateObj) {

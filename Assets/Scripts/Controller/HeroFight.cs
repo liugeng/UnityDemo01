@@ -77,8 +77,7 @@ public class HeroFight : MonoBehaviour {
 			return;
 		}
 
-		if (_sm.CanSwitch(HeroState.SelTarget)) {
-			_sm.Switch(HeroState.SelTarget);
+		if (_sm.Switch(HeroState.SelTarget)) {
 
 			targetId = r.id;
 			_selectByHand = true;
@@ -99,8 +98,7 @@ public class HeroFight : MonoBehaviour {
 			return;
 		}
 
-		if (_sm.CanSwitch(HeroState.Attack)) {
-			_sm.Switch(HeroState.Attack);
+		if (_sm.Switch(HeroState.Attack)) {
 			Quaternion rotation = Quaternion.LookRotation(target.transform.position - transform.position);
 			rotation.x = 0;
 			rotation.z = 0;

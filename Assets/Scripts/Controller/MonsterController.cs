@@ -7,7 +7,7 @@ public class MonsterController : IRole {
 	private enum Act {
 		Idle, Walk, Attack
 	}
-	private bool _isPatrol = true; //巡逻
+	private bool _isPatrol = false; //巡逻
 	private Act _curAct;
 	private float _duration;
 	private float _elapsed;

@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿#define DEBUG_POSITION
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+
 
 [RequireComponent(typeof(CharacterController))]
 public class HeroMove : MonoBehaviour, IJoyStickHandler {
@@ -28,6 +31,10 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 	private MoveCtrlType _moveCtrlType = MoveCtrlType.None;
 	private CharacterController _controller;
 
+	#if DEBUG_POSITION
+		private List<Vector3> debugPosList = new List<Vector3>();
+	#endif
+
 
 	void Start() {
 		instance = this;
@@ -39,6 +46,15 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 		if (_isMoving) {
 			UpdateMove();
 		}
+
+#if DEBUG_POSITION
+		Debug.DrawLine(transform.position, transform.position + transform.up * 10, Color.yellow);
+		Debug.DrawLine(_tarPosition, _tarPosition + transform.up * 10, Color.green);
+
+		//foreach (Vector3 pos in debugPosList) {
+			//Debug.DrawLine(pos, pos + transform.up * 10, Color.red);
+		//}
+#endif
 	}
 
 	//HeroController check first, then call this function
@@ -80,7 +96,9 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 
 			//Quaternion tmp = transform.rotation;
 			transform.rotation = _tarRotation;
-			_speedVec = transform.TransformDirection(Vector3.forward * _moveSpeed);
+			//_speedVec = transform.TransformDirection(Vector3.forward * _moveSpeed);
+			_speedVec = (_tarPosition - transform.position).normalized * _moveSpeed;
+
 			//transform.rotation = tmp;
 
 			if (_moveCtrlType != MoveCtrlType.Target) {
@@ -114,8 +132,7 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 
 	//追踪移动
 	public void TraceMove() {
-		if (_sm.CanSwitch(HeroState.Trace)) {
-			_sm.Switch(HeroState.Trace);
+		if (_sm.Switch(HeroState.Trace)) {
 
 			_isMoving = true;
 			_moveCtrlType = MoveCtrlType.Trace;
@@ -128,9 +145,17 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 			transform.rotation = Quaternion.Lerp(transform.rotation, _tarRotation, Time.deltaTime * 10);
 		}
 
+		//_speedVec = (_tarPosition - transform.position).normalized * _moveSpeed;
+		_speedVec.y -= 200 * Time.deltaTime;
+
 		if (_moveCtrlType == MoveCtrlType.Target) {
-			_controller.SimpleMove(_speedVec);
-			CheckDistance();
+#if DEBUG_POSITION
+			debugPosList.Add(transform.position);
+#endif
+			if (!CheckTargetPos()) {
+				//_controller.SimpleMove(_speedVec);
+				_controller.Move(_speedVec * Time.deltaTime);
+			}
 
 		} else if (_moveCtrlType == MoveCtrlType.Trace) {
 			IRole traceTarget = HeroFight.instance.GetTraceTarget();
@@ -154,17 +179,27 @@ public class HeroMove : MonoBehaviour, IJoyStickHandler {
 			}
 
 		} else {
-			_controller.SimpleMove(_speedVec);
+			//_controller.SimpleMove(_speedVec);
+			_controller.Move(_speedVec * Time.deltaTime);
 		}
 	}
 
-	void CheckDistance() {
-		float distance = Vector3.Distance(transform.position, _tarPosition);
-		//float distance = Mathf.Sqrt((transform.position.x-_tarPosition.x)*(transform.position.x-_tarPosition.x)+
-		//	(transform.position.z-_tarPosition.z)*(transform.position.z-_tarPosition.z));
-		if (distance <= 0.5f && _isMoving) {
+	bool CheckTargetPos() {
+		//float distance = Vector3.Distance(transform.position, _tarPosition);
+		float distance = Mathf.Sqrt((transform.position.x-_tarPosition.x)*(transform.position.x-_tarPosition.x)+
+			(transform.position.z-_tarPosition.z)*(transform.position.z-_tarPosition.z));
+		Debug.Log("distance " + distance);
+		//if (distance <= 0.1f && _isMoving) {
+		//	OnMoveEnd();
+		//}
+
+		if (distance <= _moveSpeed * Time.deltaTime) {
+			_tarPosition.y = transform.position.y;
+			transform.position = _tarPosition;
 			OnMoveEnd();
+			return true;
 		}
+		return false;
 	}
 
 	public void OnJoyStickDrag(Vector2 delta) {
